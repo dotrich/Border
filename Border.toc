@@ -1,0 +1,11 @@
+## Interface: 11302
+## Title: Border
+## Notes: Border, border, border!
+
+## SavedVariablesPerCharacter: BorderDB
+
+Libs\LibStub\LibStub.lua
+Libs\StdUi\StdUi.xml
+
+Border.lua
+Border.xml
