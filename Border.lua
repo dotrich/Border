@@ -19,7 +19,7 @@ end
 local function InitBorderDB()
 	if (BorderDB == nil) then
 		BorderDB = {
-			border = {r= .24, g= .24, b= .24, a= 1}
+			border = {r= .24, g= .24, b= .24, a= 1},
 		};
 	end
 end
@@ -28,6 +28,7 @@ local function SetBackdropBorderColors(color)
 	window:SetBackdropBorderColor(color.r, color.g, color.b, color.a);
 	colorInput.target:SetBackdropBorderColor(color.r, color.g, color.b, color.a);
 	button:SetBackdropBorderColor(color.r, color.g, color.b, color.a);
+	button.origBackdropBorderColor = {color.r, color.g, color.b, color.a};
 end
 
 local function BorderWindow_OnEvent(self, event, msg)
