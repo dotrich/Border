@@ -2,10 +2,9 @@ local Border, Bor = ...;
 
 STDUI_BOR = LibStub("StdUi"):NewInstance();
 
-local window = STDUI_BOR:Window(UIParent, 200, 100);
+local window = STDUI_BOR:Window(UIParent, 200, 40);
 window:RegisterEvent("ADDON_LOADED");
 
-local colorInput;
 local button;
 
 local function InitFrame(frame)
@@ -19,16 +18,9 @@ end
 local function InitBorderDB()
 	if (BorderDB == nil) then
 		BorderDB = {
-			border = {r= .24, g= .24, b= .24, a= 1},
+			highlight = {r= 1, g= 0, b= 0, a= 1}
 		};
 	end
-end
-
-local function SetBackdropBorderColors(color)
-	window:SetBackdropBorderColor(color.r, color.g, color.b, color.a);
-	colorInput.target:SetBackdropBorderColor(color.r, color.g, color.b, color.a);
-	button:SetBackdropBorderColor(color.r, color.g, color.b, color.a);
-	button.origBackdropBorderColor = {color.r, color.g, color.b, color.a};
 end
 
 local function BorderWindow_OnEvent(self, event, msg)
@@ -37,43 +29,25 @@ local function BorderWindow_OnEvent(self, event, msg)
 		InitBorderDB();
 		
 		--synchronize StdUi and BorderDB
-		STDUI_BOR.config.backdrop.border = BorderDB.border;
+		STDUI_BOR.config.backdrop.highlight = BorderDB.highlight;
+		STDUI_BOR.config.highlight.color = BorderDB.highlight;
 		
 		--main window
 		InitFrame(window);
-		local row;
-		local rowConfig = { margin = {bottom = 2} };
+		local rowConfig = { margin = {top = 10, bottom = 10} };
 		
-		--main window widgets
-		colorInput = STDUI_BOR:ColorInput(window, "Border Color", 128, 20, BorderDB.border);
-		colorInput:SetPoint("CENTER");
-		
-		row = window:AddRow(rowConfig);
-		row:AddElement(colorInput);
-		
-		button = STDUI_BOR:Button(window, 128, 20, "Print Border Color");
-		button:SetPoint("CENTER");
-		
-		row = window:AddRow(rowConfig);
+		---button
+		button = STDUI_BOR:Button(window, 128, 20, "Print Highlight Color");
+		button:SetPoint("CENTER");		
+		local row = window:AddRow(rowConfig);
 		row:AddElement(button);
 		
+		--finalize layout
 		window:DoLayout();
-		SetBackdropBorderColors(BorderDB.border);
 		
-		--widget event handlers
-		colorInput.OnValueChanged = function(_, color)
-			BorderDB.border.r = color.r;
-			BorderDB.border.g = color.g;
-			BorderDB.border.b = color.b;
-			BorderDB.border.a = color.a;
-			
-			STDUI_BOR.config.backdrop.border = BorderDB.border;
-			SetBackdropBorderColors(color);
-		end
-		
-		button:SetScript("OnClick", function()
-			local color = BorderDB.border;
-			
+		--handlers
+		button:SetScript("OnClick", function()		
+			local color = BorderDB.highlight;
 			print(color.r, ' ', color.g, ' ', color.b, ' ', color.a);
 		end);
 	end
